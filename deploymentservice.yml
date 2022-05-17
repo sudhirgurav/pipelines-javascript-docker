@@ -15,11 +15,6 @@ apiVersion: apps/v1
        nodeSelector:
            "beta.kubernetes.io/os": linux
        containers:
-       - env:
-          - name: PUBLIC_FOLDER
-            value: ../site
-          - name: HTTP_PORT
-            value: "80"
          image: sudhirgurav24/sudhirdockerrepo:latest
          imagePullPolicy: Always
          name: my-app
@@ -45,7 +40,6 @@ apiVersion: apps/v1
    name: my-app
  spec:
    type: "LoadBalancer"
-   externalTrafficPolicy: Local
    ports:
    - name: "http"
      protocol: TCP
