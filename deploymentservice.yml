@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+ kind: Deployment
+ metadata:
+   name: my-app
+   labels:
+     environment: production
+     app: my-app
+ spec:
+   replicas: 2
+   template:
+     metadata:
+       labels:
+         app: my-app
+     spec:
+       nodeSelector:
+           "beta.kubernetes.io/os": linux
+       containers:
+       - env:
+          - name: PUBLIC_FOLDER
+            value: ../site
+          - name: HTTP_PORT
+            value: "80"
+         image: sudhirgurav24/sudhirdockerrepo:latest
+         imagePullPolicy: Always
+         name: my-app
+         ports:
+         - containerPort: 80
+         readinessProbe:
+           httpGet:
+             port: 80
+             path: /api/
+         livenessProbe:
+           httpGet:
+             port: 80
+             path: /api/
+       imagePullSecrets:
+         - name: regcred
+   selector:
+     matchLabels:
+       app: my-app
+ ---
+ apiVersion: v1
+ kind: Service
+ metadata:
+   name: my-app
+ spec:
+   type: "LoadBalancer"
+   externalTrafficPolicy: Local
+   ports:
+   - name: "http"
+     protocol: TCP
+     port: 80
+     targetPort: 80
+   selector:
+     name: my-app
