@@ -1,43 +1,36 @@
 apiVersion: apps/v1
- kind: Deployment
- metadata:
-   name: my-app
-   labels:
-     environment: production
-     app: my-app
- spec:
-   replicas: 2
-   template:
-     metadata:
-       labels:
-         app: my-app
-     spec:
-       nodeSelector:
-           "beta.kubernetes.io/os": linux
-       containers:
-         image: sudhirgurav24/sudhirdockerrepo:latest
-         imagePullPolicy: Always
-         name: my-app
+kind: Deployment
+metadata:
+  name: myapp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: myapp
+  template:
+    metadata:
+      labels:
+        app: myapp
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+      containers:
+      - name: sudhirdockerrepo
+        image: sudhirgurav24/sudhirdockerrepo:latest
+          imagePullPolicy: Always
+         name: myapp
          ports:
          - containerPort: 80
-         readinessProbe:
-           httpGet:
-             port: 80
-             path: /api/
-         livenessProbe:
-           httpGet:
-             port: 80
-             path: /api/
        imagePullSecrets:
          - name: regcred
-   selector:
-     matchLabels:
-       app: my-app
+        env:
+        - name: REDIS
+          value: "myapp"
  ---
  apiVersion: v1
  kind: Service
  metadata:
-   name: my-app
+   name: myapp
  spec:
    type: "LoadBalancer"
    ports:
@@ -46,4 +39,4 @@ apiVersion: apps/v1
      port: 80
      targetPort: 80
    selector:
-     name: my-app
+     name: myapp
