@@ -23,9 +23,7 @@ spec:
             - name: http
               containerPort: 80
               protocol: TCP
-          volumeMounts:
-            - mountPath: /etc/localtime
-              name: tzmount          
+              
 ---
 
 # myapp/service.yaml
