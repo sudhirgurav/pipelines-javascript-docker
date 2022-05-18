@@ -1,8 +1,11 @@
 ---
+# myapp/deployment.yaml
 apiVersion: apps/v1
- kind: Deployment
- metadata:
+kind: Deployment
+metadata:
   name: myapp
+  labels:
+    app: myapp
 spec:
   replicas: 2
   selector:
@@ -13,31 +16,32 @@ spec:
       labels:
         app: myapp
     spec:
-      nodeSelector:
-        "kubernetes.io/os": linux
       containers:
-      - name: sudhirdockerrepo
-        image: sudhirgurav24/sudhirdockerrepo:latest
-          imagePullPolicy: Always
-         name: myapp
-         ports:
-         - containerPort: 80
-       imagePullSecrets:
-         - name: regcred
-        env:
-        - name: REDIS
-          value: "myapp"
- ---
- apiVersion: v1
- kind: Service
- metadata:
-   name: myapp
- spec:
-   type: "LoadBalancer"
-   ports:
-   - name: "http"
-     protocol: TCP
-     port: 80
-     targetPort: 80
-   selector:
-     name: myapp
+        - name: myapp
+          image: sudhirgurav24/sudhirdockerrepo:latest
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          volumeMounts:
+            - mountPath: /etc/localtime
+              name: tzmount          
+
+---
+
+# myapp/service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: myapp
+  labels:
+    app: myapp
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 80
+      targetPort: 80
+      protocol: TCP
+      name: http
+  selector:
+    app: myapp
