@@ -26,7 +26,6 @@ spec:
           volumeMounts:
             - mountPath: /etc/localtime
               name: tzmount          
-
 ---
 
 # myapp/service.yaml
