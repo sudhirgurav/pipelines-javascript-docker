@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: sudhirguravpipelinesjavascriptdocker 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sudhirguravpipelinesjavascriptdocker
+  template:
+    metadata:
+      labels:
+        app: sudhirguravpipelinesjavascriptdocker 
+    spec:
+      containers:
+        - name: sudhirguravpipelinesjavascriptdocker 
+          image: sudhirnewacr.azurecr.io/sudhirguravpipelinesjavascriptdocker
+          ports:
+          - containerPort: 8080
