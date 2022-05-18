@@ -17,7 +17,7 @@ spec:
         app: myapp
     spec:
       containers:
-        - name: myapp
+        - name: sudhirdockerrepo
           image: sudhirgurav24/sudhirdockerrepo:latest
           ports:
             - name: http
